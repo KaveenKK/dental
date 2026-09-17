@@ -67,12 +67,12 @@ export function Hero() {
         </div>
 
         {/* Right visuals */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           <ComparisonSlider
             image="/portrait-female.png"
             alt="Facial assessment comparison of a woman before and projected result"
           />
-          <div className="translate-y-6">
+          <div className="sm:translate-y-6">
             <ComparisonSlider
               image="/portrait-male.png"
               alt="Facial assessment comparison of a man before and projected result"

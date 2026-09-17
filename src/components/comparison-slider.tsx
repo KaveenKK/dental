@@ -28,7 +28,7 @@ export function ComparisonSlider({
 
   const onPointerDown = (e: React.PointerEvent) => {
     draggingRef.current = true
-    ;(e.target as HTMLElement).setPointerCapture?.(e.pointerId)
+    containerRef.current?.setPointerCapture?.(e.pointerId)
     updateFromClientX(e.clientX)
   }
   const onPointerMove = (e: React.PointerEvent) => {
@@ -47,10 +47,12 @@ export function ComparisonSlider({
   return (
     <div
       ref={containerRef}
-      className="group relative aspect-[3/4] w-full select-none overflow-hidden rounded-2xl bg-[#aebac2] ring-1 ring-black/5"
+      className="group relative aspect-[3/4] w-full select-none overflow-hidden rounded-2xl bg-[#aebac2] ring-1 ring-black/5 touch-none"
+      onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
       {/* Base ("before") image */}
       <img
@@ -86,6 +88,9 @@ export function ComparisonSlider({
       <span className="absolute right-4 top-4 font-mono text-[11px] font-medium tracking-[0.2em] text-white/85">
         {projectionLabel}
       </span>
+      <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/35 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-white/90 md:hidden">
+        DRAG
+      </span>
 
       {/* Divider line */}
       <div
@@ -100,10 +105,10 @@ export function ComparisonSlider({
         aria-valuenow={Math.round(position)}
         aria-valuemin={0}
         aria-valuemax={100}
+        aria-valuetext={`${Math.round(position)} percent projection`}
         role="slider"
         onKeyDown={onKeyDown}
-        onPointerDown={onPointerDown}
-        className="absolute top-1/2 z-20 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-white/70 bg-white/15 text-white backdrop-blur-md transition-transform group-hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        className="absolute top-1/2 z-20 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-white/70 bg-white/15 text-white backdrop-blur-md transition-transform group-hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:h-11 sm:w-11"
         style={{ left: `${position}%` }}
       >
         <ChevronLeft className="h-4 w-4 -mr-1" strokeWidth={2} />
