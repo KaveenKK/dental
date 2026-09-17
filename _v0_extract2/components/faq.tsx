@@ -41,7 +41,7 @@ export function Faq() {
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground">
             Still unsure? Reach us at{' '}
             <a href="#" className="text-foreground underline underline-offset-4">
-              hello@nevengi.co
+              hello@refyn.co
             </a>
             .
           </p>

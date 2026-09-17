@@ -10,7 +10,7 @@ import { Pricing } from './components/pricing';
 import { Faq } from './components/faq';
 import { CtaFooter } from './components/cta-footer';
 
-export default function RefineAI() {
+export default function Nevengi() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
