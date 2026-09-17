@@ -8,7 +8,7 @@ const stats = [
 
 export function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden px-4 pt-28 sm:pt-32 lg:pt-36">
+    <section id="top" className="relative overflow-x-hidden px-4 pt-28 sm:pt-32 lg:pt-36">
       {/* ambient background */}
       <div
         aria-hidden
