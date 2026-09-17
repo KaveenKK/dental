@@ -29,13 +29,13 @@ export function WhySection() {
       <div className="mx-auto max-w-6xl">
         <div className="max-w-2xl">
           <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-brand">
-            Why Nevengi
+            Why Refyn
           </span>
           <h2 className="mt-4 text-balance text-4xl font-medium leading-tight tracking-tight sm:text-5xl">
             The rigor of a clinic, in an assessment you can start today.
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground">
-            Most beauty advice is generic. Nevengi treats your face as the specific
+            Most beauty advice is generic. Refyn treats your face as the specific
             structure it is — analyzing it with precision, then translating the
             data into changes that actually matter.
           </p>
