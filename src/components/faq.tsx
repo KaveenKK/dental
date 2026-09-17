@@ -2,8 +2,8 @@ import { Plus } from 'lucide-react'
 
 const faqs = [
   {
-    q: 'Is Refyn a medical or clinical service?',
-    a: 'Refyn provides a clinical-grade aesthetic assessment for educational and personal-improvement purposes. It is not a medical diagnosis. For any procedure, we help you prepare and refer you to qualified, licensed practitioners.',
+    q: 'Is Nevengi a medical or clinical service?',
+    a: 'Nevengi provides a clinical-grade aesthetic assessment for educational and personal-improvement purposes. It is not a medical diagnosis. For any procedure, we help you prepare and refer you to qualified, licensed practitioners.',
   },
   {
     q: 'What photos do I need to submit?',
@@ -41,7 +41,7 @@ export function Faq() {
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground">
             Still unsure? Reach us at{' '}
             <a href="#" className="text-foreground underline underline-offset-4">
-              hello@refyn.co
+              hello@nevengi.co
             </a>
             .
           </p>

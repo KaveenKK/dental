@@ -1,10 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import RefineAI from './RefineAI';
+import Nevengi from './Nevengi';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RefineAI />
+    <Nevengi />
   </StrictMode>
 );

@@ -50,7 +50,7 @@ export function CtaFooter() {
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
             <FooterCol
               title="Product"
-              links={['Why Refyn', 'How it works', 'Results', 'Plans']}
+              links={['Why Nevengi', 'How it works', 'Results', 'Plans']}
             />
             <FooterCol
               title="Company"
@@ -64,7 +64,7 @@ export function CtaFooter() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Refyn. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Nevengi. All rights reserved.</p>
           <p>Not a substitute for professional medical advice.</p>
         </div>
       </div>

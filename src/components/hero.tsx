@@ -1,4 +1,4 @@
-import { ComparisonSlider } from './comparison-slider'
+import { Layers, ScanFace, SlidersHorizontal, Sparkles } from 'lucide-react'
 
 const stats = [
   { value: '68', label: 'Facial landmarks mapped' },
@@ -32,7 +32,7 @@ export function Hero() {
           </h1>
 
           <p className="mt-6 max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
-            Refyn scores your facial harmony against clinical proportion research,
+            Nevengi helps structure your facial assessment around clinical proportion research,
             pinpoints your highest-impact opportunities, and builds a personalized,
             non-surgical plan — backed by science, not guesswork.
           </p>
@@ -66,18 +66,30 @@ export function Hero() {
           </dl>
         </div>
 
-        {/* Right visuals */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-5">
-          <ComparisonSlider
-            image="/portrait-female.png"
-            alt="Facial assessment comparison of a woman before and projected result"
-          />
-          <div className="translate-y-6">
-            <ComparisonSlider
-              image="/portrait-male.png"
-              alt="Facial assessment comparison of a man before and projected result"
-            />
+        <div className="overflow-hidden rounded-3xl border border-[#17363a] bg-[#0d2025] p-3 shadow-[0_28px_60px_-32px_rgba(14,72,76,0.8)] sm:p-4">
+          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#10282d] px-3 py-2.5 text-white">
+            <div className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-md bg-brand text-primary-foreground"><ScanFace className="h-3.5 w-3.5" /></span><span className="text-xs font-medium">Nevengi Studio</span></div>
+            <span className="font-mono text-[9px] tracking-[0.15em] text-[#a7f3d0]">WORKSPACE PREVIEW</span>
           </div>
+          <div className="mt-3 grid grid-cols-[82px_minmax(0,1fr)] gap-3 sm:grid-cols-[104px_minmax(0,1fr)]">
+            <div className="rounded-xl border border-white/10 bg-[#0a1a1f] p-2 text-white/55">
+              <p className="hidden font-mono text-[8px] tracking-[0.15em] text-white/35 sm:block">LAYERS</p>
+              <div className="mt-1 space-y-2 sm:mt-3">
+                {[[Layers, 'Overview'], [Sparkles, 'Skin'], [ScanFace, 'Structure'], [SlidersHorizontal, 'Studies']].map(([Icon, label], index) => {
+                  const ToolIcon = Icon as typeof Layers
+                  return <div key={String(label)} className={`flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-[9px] sm:text-[10px] ${index === 0 ? 'bg-brand text-primary-foreground' : ''}`}><ToolIcon className="h-3 w-3 shrink-0" /><span className="truncate">{String(label)}</span></div>
+                })}
+              </div>
+            </div>
+            <div className="relative min-h-[280px] overflow-hidden rounded-xl border border-white/10 bg-[#10282d] sm:min-h-[360px]">
+              <img src="/portrait-female.png" alt="Nevengi facial-analysis workspace preview" className="absolute inset-0 h-full w-full object-cover opacity-80" />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px] opacity-50" />
+              <div className="absolute left-[34%] top-[19%] h-[55%] w-[34%] rounded-[45%] border border-[#a7f3d0]/80" />
+              <div className="absolute inset-x-[18%] top-1/2 border-t border-dashed border-[#a7f3d0]/70" />
+              <div className="absolute bottom-3 left-3 rounded-md border border-white/10 bg-[#092126]/80 px-2 py-1.5 font-mono text-[8px] tracking-[0.14em] text-white/80 backdrop-blur">LANDMARK MAP / READY</div>
+            </div>
+          </div>
+          <p className="px-1 pt-3 text-xs leading-relaxed text-white/55">A structured space for source photos, measurement layers, visual studies and a practical plan.</p>
         </div>
       </div>
     </section>

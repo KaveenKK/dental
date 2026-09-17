@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react'
 import { Logo } from './logo'
 
 const links = [
-  { label: 'Why Refyn', href: '#why' },
+  { label: 'Why Nevengi', href: '#why' },
   { label: 'How it works', href: '#how' },
   { label: 'Results', href: '#results' },
   { label: 'FAQ', href: '#faq' },
@@ -33,7 +33,7 @@ export function SiteHeader() {
       >
         <a href="#top" className="text-foreground">
           <Logo />
-          <span className="sr-only">Refyn home</span>
+          <span className="sr-only">Nevengi home</span>
         </a>
 
         <div className="hidden items-center gap-8 md:flex">

@@ -17,7 +17,7 @@ export function Logo({ className = '' }: { className?: string }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className="text-[17px] font-semibold tracking-tight">Refyn</span>
+      <span className="text-[17px] font-semibold tracking-tight">Nevengi</span>
     </span>
   )
 }
