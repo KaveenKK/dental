@@ -1,12 +1,55 @@
 @import "tailwindcss";
 
-html,
-body,
-#root {
-  min-height: 100%;
+@theme inline {
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-gold: var(--gold);
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
+
+:root {
+  color-scheme: light;
+  --background: oklch(0.972 0.008 92);
+  --foreground: oklch(0.26 0.025 205);
+  --card: oklch(0.995 0.004 92);
+  --primary-foreground: oklch(0.98 0.01 92);
+  --secondary: oklch(0.94 0.012 150);
+  --brand: oklch(0.46 0.06 197);
+  --brand-strong: oklch(0.32 0.05 202);
+  --brand-soft: oklch(0.9 0.03 185);
+  --gold: oklch(0.72 0.09 75);
+  --muted: oklch(0.945 0.01 100);
+  --muted-foreground: oklch(0.5 0.02 205);
+  --border: oklch(0.9 0.012 180);
+}
+
+* { border-color: var(--border); }
+
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: #020617;
+  min-width: 320px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
+
+button, a { -webkit-tap-highlight-color: transparent; }
+
+@keyframes scanSweep {
+  from { top: 0%; }
+  to { top: 100%; }
+}
+
+.scan-line { animation: scanSweep 1.4s ease-in-out infinite alternate; }
