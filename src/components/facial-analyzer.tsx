@@ -183,7 +183,7 @@ const LANDMARKS = Array.from({ length: 68 }, (_, i) => {
   }
 })
 
-export function FacialAnalyzer() {
+export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean }) {
   const [stage, setStage] = useState<Stage>('idle')
   const [preview, setPreview] = useState<string | null>(null)
   const [scanStep, setScanStep] = useState(0)
@@ -193,6 +193,7 @@ export function FacialAnalyzer() {
   const [tools, setTools] = useState({ landmarks: true, guides: true })
   const [presetId, setPresetId] = useState('current')
   const inputRef = useRef<HTMLInputElement>(null)
+  const hasBootedStudio = useRef(false)
 
   const runScan = useCallback(() => {
     setStage('scanning')
@@ -212,11 +213,37 @@ export function FacialAnalyzer() {
   const handleFile = useCallback(
     (file?: File) => {
       if (!file) return
+      if (!studioOnly) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          window.sessionStorage.setItem('nevengi-source-photo', String(reader.result))
+          window.location.assign('/studio')
+        }
+        reader.readAsDataURL(file)
+        return
+      }
       setPreview(URL.createObjectURL(file))
       runScan()
     },
-    [runScan],
+    [runScan, studioOnly],
   )
+
+  useEffect(() => {
+    if (!studioOnly || hasBootedStudio.current) return
+    hasBootedStudio.current = true
+    const savedPhoto = window.sessionStorage.getItem('nevengi-source-photo')
+    if (savedPhoto) {
+      setPreview(savedPhoto)
+      runScan()
+      return
+    }
+    if (new URLSearchParams(window.location.search).get('sample') === '1') runScan()
+  }, [runScan, studioOnly])
+
+  const openSampleStudio = () => {
+    window.sessionStorage.removeItem('nevengi-source-photo')
+    window.location.assign('/studio?sample=1')
+  }
 
   const toggleTreatment = (id: string) => {
     setPresetId('custom')
@@ -298,9 +325,9 @@ export function FacialAnalyzer() {
   }
 
   return (
-    <section id="analyze" className="scroll-mt-24 px-4 py-24 sm:py-28">
+    <section id={studioOnly ? undefined : 'analyze'} className={`${studioOnly ? 'min-h-[calc(100vh-73px)] py-8 sm:py-10' : 'scroll-mt-24 px-4 py-24 sm:py-28'}`}>
       <div className="mx-auto max-w-6xl">
-        <div className="mx-auto max-w-2xl text-center">
+        {!studioOnly && <div className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand-soft/40 px-3.5 py-1.5 font-mono text-[11px] font-medium tracking-[0.18em] text-brand-strong">
             <span className="h-1.5 w-1.5 rounded-full bg-brand" />
             THE ANALYSIS WORKSPACE
@@ -313,13 +340,21 @@ export function FacialAnalyzer() {
             studio — segmented regions, clinical measurements, a treatment library, and
             a live projection of your potential.
           </p>
-        </div>
+        </div>}
 
-        {stage === 'idle' && (
-          <div className="mx-auto mt-12 max-w-xl">
+        {stage === 'idle' && !studioOnly && (
+          <div className="mx-auto mt-12 grid max-w-5xl overflow-hidden rounded-3xl border border-border bg-card shadow-[0_24px_70px_-34px_rgba(20,60,70,0.28)] md:grid-cols-2">
+            <div className="relative min-h-[360px] overflow-hidden bg-[#143238] md:min-h-full">
+              <img src="/portrait-female.png" alt="Portrait used for Nevengi analysis" className="absolute inset-0 h-full w-full object-cover opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0e282d]/80 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/15 bg-[#0d252a]/75 p-4 text-white backdrop-blur">
+                <p className="font-mono text-[10px] tracking-[0.17em] text-[#a7f3d0]">NEVENGI STUDIO</p>
+                <p className="mt-1 text-sm leading-relaxed text-white/75">A structured workspace for landmarks, visual studies and your practical next steps.</p>
+              </div>
+            </div>
             <button
               onClick={() => inputRef.current?.click()}
-              className="group relative flex w-full flex-col items-center gap-4 overflow-hidden rounded-3xl border border-dashed border-brand/40 bg-card px-8 py-14 text-center transition-colors hover:border-brand hover:bg-brand-soft/20"
+              className="group relative flex min-h-[360px] w-full flex-col items-center justify-center gap-4 px-8 py-14 text-center transition-colors hover:bg-brand-soft/20 sm:px-12"
             >
               <span className="grid h-14 w-14 place-items-center rounded-2xl bg-brand/10 text-brand-strong">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -337,20 +372,29 @@ export function FacialAnalyzer() {
             </button>
             <p className="mt-4 text-center text-xs text-muted-foreground">
               No photo handy?{' '}
-              <button onClick={runScan} className="font-medium text-brand-strong underline underline-offset-2">
+              <button onClick={openSampleStudio} className="font-medium text-brand-strong underline underline-offset-2">
                 Try it with a sample face
               </button>
             </p>
           </div>
         )}
 
-        <input
+        {stage === 'idle' && studioOnly && (
+          <div className="mx-auto mt-16 max-w-lg rounded-3xl border border-border bg-card p-8 text-center shadow-[0_24px_70px_-34px_rgba(20,60,70,0.28)]">
+            <p className="font-mono text-[10px] tracking-[0.18em] text-brand">NO SOURCE PHOTO</p>
+            <h1 className="mt-3 text-3xl font-medium tracking-tight">Start an assessment from the home page.</h1>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Choose a front-facing photo first, and Nevengi will open it here in the Studio.</p>
+            <a href="/#analyze" className="mt-6 inline-flex rounded-full bg-brand px-5 py-3 text-sm font-medium text-primary-foreground">Back to upload</a>
+          </div>
+        )}
+
+        {!studioOnly && <input
           ref={inputRef}
           type="file"
           accept="image/*"
           className="sr-only"
           onChange={(e) => handleFile(e.target.files?.[0])}
-        />
+        />}
 
         {stage === 'scanning' && (
           <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-3xl border border-border bg-card">
