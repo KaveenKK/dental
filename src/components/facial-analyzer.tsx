@@ -150,6 +150,11 @@ const PRESETS: { id: string; name: string; desc: string; treatmentIds: string[] 
 const ALL_TREATMENTS = new Map<string, { t: Treatment; region: Region }>()
 REGIONS.forEach((r) => r.treatments.forEach((t) => ALL_TREATMENTS.set(t.id, { t, region: r })))
 
+function goToStudio(path = '/studio') {
+  window.history.pushState({}, '', path)
+  window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
 const BASE_FILTER: FilterParts = { brightness: 1, contrast: 1, saturate: 1, sepia: 0 }
 
 function useCountUp(target: number, run: boolean, duration = 900) {
@@ -217,7 +222,7 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
         const reader = new FileReader()
         reader.onload = () => {
           window.sessionStorage.setItem('nevengi-source-photo', String(reader.result))
-          window.location.assign('/studio')
+          goToStudio('/studio')
         }
         reader.readAsDataURL(file)
         return
@@ -242,7 +247,11 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
 
   const openSampleStudio = () => {
     window.sessionStorage.removeItem('nevengi-source-photo')
-    window.location.assign('/studio?sample=1')
+    if (studioOnly) {
+      runScan()
+      return
+    }
+    goToStudio('/studio?sample=1')
   }
 
   const toggleTreatment = (id: string) => {
@@ -343,60 +352,87 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
         </div>}
 
         {stage === 'idle' && !studioOnly && (
-          <div className="mx-auto mt-12 grid max-w-5xl overflow-hidden rounded-3xl border border-border bg-card shadow-[0_24px_70px_-34px_rgba(20,60,70,0.28)] md:grid-cols-2">
-            <div className="relative min-h-[360px] overflow-hidden bg-[#143238] md:min-h-full">
-              <img src="/portrait-female.png" alt="Portrait used for Nevengi analysis" className="absolute inset-0 h-full w-full object-cover opacity-90" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0e282d]/80 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/15 bg-[#0d252a]/75 p-4 text-white backdrop-blur">
-                <p className="font-mono text-[10px] tracking-[0.17em] text-[#a7f3d0]">NEVENGI STUDIO</p>
-                <p className="mt-1 text-sm leading-relaxed text-white/75">A structured workspace for landmarks, visual studies and your practical next steps.</p>
+          <div className="mt-12 overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_0_rgba(0,0,0,0.02),0_24px_60px_-30px_rgba(20,60,70,0.35)]">
+            <div className="grid md:grid-cols-2">
+              <div className="relative border-b border-border bg-gradient-to-br from-brand-soft/40 to-secondary/60 p-6 md:border-b-0 md:border-r sm:p-8">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
+                  <img
+                    src="/portrait-3.png"
+                    alt="Example portrait for facial analysis"
+                    className="h-full w-full object-cover opacity-90"
+                  />
+                  <div className="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-30">
+                    {Array.from({ length: 9 }).map((_, i) => (
+                      <div key={i} className="border border-brand/20" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center justify-center gap-4 px-8 py-14 text-center sm:px-12">
+                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-brand/10 text-brand-strong">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path d="M12 16V4m0 0L8 8m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                <span className="text-lg font-medium">Upload a front-facing photo</span>
+                <span className="max-w-sm text-sm text-muted-foreground">
+                  Neutral expression, even lighting, hair off the face. Processed privately —
+                  never stored or shared.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => inputRef.current?.click()}
+                  className="mt-1 rounded-full border border-border bg-card px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  Choose a photo
+                </button>
+                <button
+                  type="button"
+                  onClick={openSampleStudio}
+                  className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.01]"
+                >
+                  Open the studio
+                </button>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  No photo handy? Opening the studio uses a sample face.
+                </p>
               </div>
             </div>
-            <button
-              onClick={() => inputRef.current?.click()}
-              className="group relative flex min-h-[360px] w-full flex-col items-center justify-center gap-4 px-8 py-14 text-center transition-colors hover:bg-brand-soft/20 sm:px-12"
-            >
-              <span className="grid h-14 w-14 place-items-center rounded-2xl bg-brand/10 text-brand-strong">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M12 16V4m0 0L8 8m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className="text-lg font-medium">Upload a front-facing photo</span>
-              <span className="max-w-sm text-sm text-muted-foreground">
-                Neutral expression, even lighting, hair off the face. Processed privately —
-                never stored or shared.
-              </span>
-              <span className="mt-2 rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-primary-foreground">
-                Open the studio
-              </span>
-            </button>
-            <p className="mt-4 text-center text-xs text-muted-foreground">
-              No photo handy?{' '}
-              <button onClick={openSampleStudio} className="font-medium text-brand-strong underline underline-offset-2">
-                Try it with a sample face
-              </button>
-            </p>
           </div>
         )}
 
         {stage === 'idle' && studioOnly && (
-          <div className="mx-auto mt-16 max-w-lg rounded-3xl border border-border bg-card p-8 text-center shadow-[0_24px_70px_-34px_rgba(20,60,70,0.28)]">
-            <p className="font-mono text-[10px] tracking-[0.18em] text-brand">NO SOURCE PHOTO</p>
-            <h1 className="mt-3 text-3xl font-medium tracking-tight">Start an assessment from the home page.</h1>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Choose a front-facing photo first, and Nevengi will open it here in the Studio.</p>
-            <a href="/#analyze" className="mt-6 inline-flex rounded-full bg-brand px-5 py-3 text-sm font-medium text-primary-foreground">Back to upload</a>
+          <div className="mx-auto mt-8 max-w-lg rounded-3xl border border-dashed border-brand/40 bg-card p-8 text-center shadow-[0_24px_70px_-34px_rgba(20,60,70,0.28)]">
+            <p className="font-mono text-[10px] tracking-[0.18em] text-brand">NEVENGI STUDIO</p>
+            <h1 className="mt-3 text-3xl font-medium tracking-tight">Upload a photo to begin</h1>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Choose a front-facing photo, or continue with the sample face.
+            </p>
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-primary-foreground"
+              >
+                Upload a photo
+              </button>
+              <button type="button" onClick={openSampleStudio} className="text-sm font-medium text-brand-strong underline underline-offset-2">
+                Try it with a sample face
+              </button>
+            </div>
           </div>
         )}
 
-        {!studioOnly && <input
+        <input
           ref={inputRef}
           type="file"
           accept="image/*"
           className="sr-only"
           onChange={(e) => handleFile(e.target.files?.[0])}
-        />}
+        />
 
-        {stage === 'scanning' && (
+        {studioOnly && stage === 'scanning' && (
           <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-3xl border border-border bg-card">
             <div className="flex items-center gap-2 border-b border-border bg-secondary/50 px-4 py-2.5">
               <span className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
@@ -447,7 +483,7 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
           </div>
         )}
 
-        {stage === 'workspace' && (
+        {studioOnly && stage === 'workspace' && (
           <div className="mt-12 overflow-hidden rounded-3xl border border-border bg-card shadow-[0_24px_70px_-34px_rgba(20,60,70,0.4)]">
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-secondary/40 px-4 py-2.5">
@@ -686,7 +722,7 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
                   </p>
                 </div>
                 <a
-                  href="#plan"
+                  href="/#plan"
                   className="mt-3 w-full rounded-full bg-brand px-6 py-3 text-center text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.01]"
                 >
                   Get my full plan &amp; roadmap
@@ -696,10 +732,12 @@ export function FacialAnalyzer({ studioOnly = false }: { studioOnly?: boolean })
           </div>
         )}
 
-        <p className="mx-auto mt-4 max-w-xl text-center text-xs text-muted-foreground">
-          Projections are an aesthetic simulation based on facial-proportion research, not a
-          medical diagnosis or guaranteed outcome.
-        </p>
+        {studioOnly && (
+          <p className="mx-auto mt-4 max-w-xl text-center text-xs text-muted-foreground">
+            Projections are an aesthetic simulation based on facial-proportion research, not a
+            medical diagnosis or guaranteed outcome.
+          </p>
+        )}
       </div>
     </section>
   )
