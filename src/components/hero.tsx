@@ -71,12 +71,18 @@ export function Hero() {
           <ComparisonSlider
             image="/portrait-female.png"
             projectionImage="/projection-female.jpg"
+            projectionScale={0.94}
+            projectionOffsetY={-1.5}
+            projectionOrigin="50% 39%"
             alt="Facial assessment comparison of a woman before and projected result"
           />
           <div className="sm:translate-y-6">
             <ComparisonSlider
               image="/portrait-male.png"
               projectionImage="/projection-male.jpg"
+              projectionScale={0.9}
+              projectionOffsetY={-1}
+              projectionOrigin="50% 36%"
               alt="Facial assessment comparison of a man before and projected result"
             />
           </div>

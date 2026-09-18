@@ -6,6 +6,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 type ComparisonSliderProps = {
   image: string
   projectionImage?: string
+  projectionScale?: number
+  projectionOffsetX?: number
+  projectionOffsetY?: number
+  projectionOrigin?: string
   alt: string
   projectionLabel?: string
 }
@@ -13,6 +17,10 @@ type ComparisonSliderProps = {
 export function ComparisonSlider({
   image,
   projectionImage,
+  projectionScale = 1,
+  projectionOffsetX = 0,
+  projectionOffsetY = 0,
+  projectionOrigin = '50% 50%',
   alt,
   projectionLabel = 'PROJECTION',
 }: ComparisonSliderProps) {
@@ -106,6 +114,16 @@ export function ComparisonSlider({
           className="pointer-events-none absolute inset-y-0 right-0 overflow-hidden"
           style={{ width: `${100 - position}%` }}
         >
+          {projectionImage && projectionScale < 1 && (
+            <img
+              src={projectionImage}
+              alt=""
+              aria-hidden
+              draggable={false}
+              className="absolute right-0 top-0 h-full max-w-none scale-110 object-cover blur-md"
+              style={{ width: 'var(--slider-w)' }}
+            />
+          )}
           <img
             src={projectionImage || image || '/placeholder.svg'}
             alt=""
@@ -114,6 +132,8 @@ export function ComparisonSlider({
             className="absolute right-0 top-0 h-full max-w-none object-cover"
             style={{
               width: 'var(--slider-w)',
+              transform: `translate(${projectionOffsetX}%, ${projectionOffsetY}%) scale(${projectionScale})`,
+              transformOrigin: projectionOrigin,
               filter: projectionImage
                 ? undefined
                 : 'brightness(1.06) contrast(1.05) saturate(1.08)',

@@ -14,6 +14,9 @@ const cases = [
   {
     image: '/portrait-female.png',
     projectionImage: '/projection-female.jpg',
+    projectionScale: 0.94,
+    projectionOffsetY: -1.5,
+    projectionOrigin: '50% 39%',
     alt: 'Facial assessment comparison for member case three',
     tag: 'Symmetry & proportion',
   },
@@ -42,6 +45,9 @@ export function ResultsSection() {
               <ComparisonSlider
                 image={c.image}
                 projectionImage={c.projectionImage}
+                projectionScale={c.projectionScale}
+                projectionOffsetY={c.projectionOffsetY}
+                projectionOrigin={c.projectionOrigin}
                 alt={c.alt}
               />
               <figcaption className="mt-3 flex items-center justify-between">
