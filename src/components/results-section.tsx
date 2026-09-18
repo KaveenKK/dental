@@ -13,6 +13,7 @@ const cases = [
   },
   {
     image: '/portrait-female.png',
+    projectionImage: '/projection-female.jpg',
     alt: 'Facial assessment comparison for member case three',
     tag: 'Symmetry & proportion',
   },
@@ -38,7 +39,11 @@ export function ResultsSection() {
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cases.map((c) => (
             <figure key={c.alt}>
-              <ComparisonSlider image={c.image} alt={c.alt} />
+              <ComparisonSlider
+                image={c.image}
+                projectionImage={c.projectionImage}
+                alt={c.alt}
+              />
               <figcaption className="mt-3 flex items-center justify-between">
                 <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   {c.tag}

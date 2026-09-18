@@ -70,6 +70,7 @@ export function Hero() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           <ComparisonSlider
             image="/portrait-female.png"
+            projectionImage="/projection-female.jpg"
             alt="Facial assessment comparison of a woman before and projected result"
           />
           <div className="sm:translate-y-6">

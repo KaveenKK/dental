@@ -5,12 +5,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type ComparisonSliderProps = {
   image: string
+  projectionImage?: string
   alt: string
   projectionLabel?: string
 }
 
 export function ComparisonSlider({
   image,
+  projectionImage,
   alt,
   projectionLabel = 'PROJECTION',
 }: ComparisonSliderProps) {
@@ -105,14 +107,16 @@ export function ComparisonSlider({
           style={{ width: `${100 - position}%` }}
         >
           <img
-            src={image || '/placeholder.svg'}
+            src={projectionImage || image || '/placeholder.svg'}
             alt=""
             aria-hidden
             draggable={false}
             className="absolute right-0 top-0 h-full max-w-none object-cover"
             style={{
               width: 'var(--slider-w)',
-              filter: 'brightness(1.06) contrast(1.05) saturate(1.08)',
+              filter: projectionImage
+                ? undefined
+                : 'brightness(1.06) contrast(1.05) saturate(1.08)',
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-white/8 via-transparent to-black/10" />
