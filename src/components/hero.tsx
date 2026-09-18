@@ -76,6 +76,7 @@ export function Hero() {
           <div className="sm:translate-y-6">
             <ComparisonSlider
               image="/portrait-male.png"
+              projectionImage="/projection-male.jpg"
               alt="Facial assessment comparison of a man before and projected result"
             />
           </div>
