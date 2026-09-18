@@ -80,7 +80,8 @@ export function Hero() {
             <ComparisonSlider
               image="/portrait-male.png"
               projectionImage="/projection-male.jpg"
-              projectionScale={0.9}
+              projectionScaleX={0.94}
+              projectionScaleY={0.9}
               projectionOffsetY={0}
               projectionOrigin="50% 36%"
               projectionBackdrop="linear-gradient(to bottom, #7e8d9d 0%, #7e8d9d 53%, #15161b 75%, #111217 100%)"

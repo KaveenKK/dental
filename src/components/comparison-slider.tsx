@@ -7,6 +7,8 @@ type ComparisonSliderProps = {
   image: string
   projectionImage?: string
   projectionScale?: number
+  projectionScaleX?: number
+  projectionScaleY?: number
   projectionOffsetX?: number
   projectionOffsetY?: number
   projectionOrigin?: string
@@ -19,6 +21,8 @@ export function ComparisonSlider({
   image,
   projectionImage,
   projectionScale = 1,
+  projectionScaleX,
+  projectionScaleY,
   projectionOffsetX = 0,
   projectionOffsetY = 0,
   projectionOrigin = '50% 50%',
@@ -29,6 +33,8 @@ export function ComparisonSlider({
   const [position, setPosition] = useState(50)
   const containerRef = useRef<HTMLDivElement>(null)
   const draggingRef = useRef(false)
+  const scaleX = projectionScaleX ?? projectionScale
+  const scaleY = projectionScaleY ?? projectionScale
 
   const updateFromClientX = useCallback((clientX: number) => {
     const el = containerRef.current
@@ -119,7 +125,7 @@ export function ComparisonSlider({
             background: projectionBackdrop,
           }}
         >
-          {projectionImage && projectionScale < 1 && !projectionBackdrop && (
+          {projectionImage && (scaleX < 1 || scaleY < 1) && !projectionBackdrop && (
             <img
               src={projectionImage}
               alt=""
@@ -137,8 +143,16 @@ export function ComparisonSlider({
             className="absolute right-0 top-0 h-full max-w-none object-cover"
             style={{
               width: 'var(--slider-w)',
-              transform: `translate(${projectionOffsetX}%, ${projectionOffsetY}%) scale(${projectionScale})`,
+              transform: `translate(${projectionOffsetX}%, ${projectionOffsetY}%) scale(${scaleX}, ${scaleY})`,
               transformOrigin: projectionOrigin,
+              ...(projectionBackdrop
+                ? {
+                    WebkitMaskImage:
+                      'linear-gradient(to right, #000 0%, #000 88%, transparent 100%)',
+                    maskImage:
+                      'linear-gradient(to right, #000 0%, #000 88%, transparent 100%)',
+                  }
+                : {}),
               filter: projectionImage
                 ? undefined
                 : 'brightness(1.06) contrast(1.05) saturate(1.08)',
