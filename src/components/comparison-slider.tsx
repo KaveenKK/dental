@@ -10,6 +10,7 @@ type ComparisonSliderProps = {
   projectionOffsetX?: number
   projectionOffsetY?: number
   projectionOrigin?: string
+  projectionBackdrop?: string
   alt: string
   projectionLabel?: string
 }
@@ -21,6 +22,7 @@ export function ComparisonSlider({
   projectionOffsetX = 0,
   projectionOffsetY = 0,
   projectionOrigin = '50% 50%',
+  projectionBackdrop,
   alt,
   projectionLabel = 'PROJECTION',
 }: ComparisonSliderProps) {
@@ -112,9 +114,12 @@ export function ComparisonSlider({
 
         <div
           className="pointer-events-none absolute inset-y-0 right-0 overflow-hidden"
-          style={{ width: `${100 - position}%` }}
+          style={{
+            width: `${100 - position}%`,
+            background: projectionBackdrop,
+          }}
         >
-          {projectionImage && projectionScale < 1 && (
+          {projectionImage && projectionScale < 1 && !projectionBackdrop && (
             <img
               src={projectionImage}
               alt=""
